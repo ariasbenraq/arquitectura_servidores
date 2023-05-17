@@ -6,15 +6,25 @@
 
 
 // requerimos express
+
 const express = require('express')
 const app = express()
 
 
 //app.use(express.urlencoded({extended: false})); // peticiones codificadas como formulario (x-form-urlencoded)
+
 app.use(express.json());
 
 
+app.use((req, res, next) => {
+    console.log("here I am  at middleware");
+    
+    req.color = "red";
+    next();
+});
+
 // Definimos rutas
+
 // Metodo get; recibe dos parametros
 // Path donde escuchara la peticion, y una funcion que recibe tres objetos
 // Objeto req = la peticion
@@ -69,28 +79,18 @@ app.get('/users/:identifier/', (req, res) => {
 });
 
 app.post('/users/:identifier/', (req, res) => {
-    console.log("here I am at /");
+    console.log("body", req.body);
 
     //parametros que puedo recibir del cliente 
 
-    console.log('query params', req.query);
-    console.log('path params', req.params); //parametros en la url
-    console.log("headers", req.headers); //cabeceras
-    console.log("body", req.body); //cuerpo del mensaje post, previamente debemos hacer un app.use(express.json) para que express sepa decodificar el body de las peticiones
+    // console.log('query params', req.query);
+    // console.log('path params', req.params); //parametros en la url
+    // console.log("headers", req.headers); //cabeceras
+    // console.log("body", req.body); //cuerpo del mensaje post, previamente debemos hacer un app.use(express.json) para que express sepa decodificar el body de las peticiones
 
-    res.status(200).json({ message: "ping" });
+    res.status(200).json({ color: req.color });
 
 });
-
-
-
-app.get('/about', (req, res) => {
-
-})
-
-app.get('/posts', (req, res) => {
-
-})
 
 // Ponemos el puerto por defecto 8000, y luego una funcion a modo de call back que se ejecutarâ cuando la funcion este lista
 
